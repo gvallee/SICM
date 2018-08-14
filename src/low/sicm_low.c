@@ -292,6 +292,44 @@ void* sicm_alloc_exact(struct sicm_device* device, void* base, size_t size) {
   exit(-1);
 }
 
+void* sicm_device_alloc_mmapped(struct sicm_device* device, size_t size, int fd, off_t offset) {
+  switch(device->tag) {
+    case SICM_DRAM:
+    case SICM_KNL_HBM:
+    case SICM_POWERPC_HBM:;
+      if (fd < 0) {
+        return NULL;
+      }
+
+      int page_size = sicm_device_page_size(device);
+      int shift = 10; // i.e., 1024
+      int remaining = page_size;
+
+      while(remaining > 1) {
+        shift++;
+        remaining >>= 1;
+      }
+      int old_mode;
+      nodemask_t old_nodemask;
+      get_mempolicy(&old_mode, old_nodemask.n, numa_max_node() + 2, NULL, 0);
+      nodemask_t nodemask;
+      nodemask_zero(&nodemask);
+      nodemask_set_compat(&nodemask, sicm_numa_id(device));
+      set_mempolicy(MPOL_BIND, nodemask.n, numa_max_node() + 2);
+      void* ptr = mmap(NULL, size, PROT_READ | PROT_WRITE,
+                     MAP_SHARED, fd, offset);
+      if(ptr == (void*)-1) {
+        printf("mmap allocation error: %s\n", strerror(errno));
+      }
+
+      set_mempolicy(old_mode, old_nodemask.n, numa_max_node() + 2);
+      return ptr;
+  }
+
+  printf("error in sicm_device_alloc_mmap: unknown tag\n");
+  exit(-1);
+}
+
 void sicm_device_free(struct sicm_device* device, void* ptr, size_t size) {
   switch(device->tag) {
     case SICM_DRAM:

@@ -285,6 +285,17 @@ int sicm_can_place_exact(struct sicm_device* device);
  */
 void* sicm_device_alloc_exact(struct sicm_device* device, void* base, size_t size);
 
+/// Allocate memory on a SICM device and mmap it to a file descriptor
+/**
+ * @param[in] device Pointer to a sicm_device to allocate on.
+ * @param[in] size Amount of memory to allocate.
+ * @param[in] fd A valid file descriptor to map the memory into
+ * @param[in] offset Starting offset within the file descriptor
+ * @return Pointer to the start of the allocation.
+ *
+ */
+void *sicm_device_alloc_mmapped(struct sicm_device* device, size_t size, int fd, off_t offset);
+
 /// Deallocate/free memory on a SICM device.
 /**
  * @param[in] device Pointer to the sicm_device the allocation was made on.
