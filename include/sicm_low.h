@@ -16,6 +16,7 @@
 #endif
 #include <stdint.h>
 #include <stdlib.h>
+#include <sys/types.h>
 
 // default arena
 #define ARENA_DEFAULT NULL
