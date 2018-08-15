@@ -235,25 +235,6 @@ void *sicm_alloc(size_t sz) {
 	return ret;
 }
 
-void *sicm_alloc_mmapped(size_t sz, int fd, off_t offset) {
-    sarena *sa;
-    sicm_device *dev;
-    void *ret;
-
-    sa = pthread_getspecific(sa_default_key);
-    dev = sicm_arena_get_device(sa);
-    ret = NULL;
-
-    if (dev != NULL) {
-        ret = sicm_device_alloc_mmapped(dev, sz, fd, offset);
-        if (ret == (void *) -1) {
-            ret = NULL;
-        }
-    }
-
-    return ret;
-}
-
 void *sicm_alloc_aligned(size_t sz, size_t align) {
 	sarena *sa;
 	void *ret;
