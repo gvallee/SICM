@@ -236,8 +236,7 @@ void *sicm_alloc_aligned(size_t sz, size_t align);
  * @param[in] offset Starting offset within the file descriptor
  * @return pointer to the new allocation, or NULL if the operation failed.
  *
- * The function uses the default arena, if set. Otherwise it uses the standard
- * (je_)malloc function.
+ * The function uses the default arena, if set. Otherwise it will return NULL.
  */
 void *sicm_alloc_mmapped(size_t sz, int fd, off_t offset);
 
@@ -311,7 +310,6 @@ void* sicm_device_alloc_exact(struct sicm_device* device, void* base, size_t siz
  * @param[in] fd A valid file descriptor to map the memory into
  * @param[in] offset Starting offset within the file descriptor
  * @return Pointer to the start of the allocation.
- *
  */
 void *sicm_device_alloc_mmapped(struct sicm_device* device, size_t size, int fd, off_t offset);
 
