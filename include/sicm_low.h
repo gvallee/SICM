@@ -229,11 +229,29 @@ void *sicm_alloc(size_t sz);
  */
 void *sicm_alloc_aligned(size_t sz, size_t align);
 
+/// Allocate mmapped memory region
+/**
+ * @param[in] sz size of the region
+ * @param[in] fd A valid file descriptor to map the memory into
+ * @param[in] offset Starting offset within the file descriptor
+ * @return pointer to the new allocation, or NULL if the operation failed.
+ *
+ * The function uses the default arena, if set. Otherwise it uses the standard
+ * (je_)malloc function.
+ */
+void *sicm_alloc_mmapped(size_t sz, int fd, off_t offset);
+
 /// Deallocate/free memory region
 /**
  * @param ptr pointer to the memory to deallocated.
  */
 void sicm_free(void *ptr);
+
+/// Deallocate/free memory mapped region
+/**
+ * @param ptr pointer to the memory to deallocated.
+ */
+void sicm_free_mmapped(void *ptr, size_t sz);
 
 /// Resize a memory region
 /**

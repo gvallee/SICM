@@ -320,6 +320,7 @@ void* sicm_device_alloc_mmapped(struct sicm_device* device, size_t size, int fd,
                      MAP_SHARED, fd, offset);
       if(ptr == (void*)-1) {
         printf("mmap allocation error: %s\n", strerror(errno));
+        ptr = NULL;
       }
 
       set_mempolicy(old_mode, old_nodemask.n, numa_max_node() + 2);
