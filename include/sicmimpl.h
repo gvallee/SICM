@@ -1,6 +1,8 @@
 #ifndef __SICMIMPL_H
 #define __SICMIMPL_H
 
+#include <sys/types.h>
+
 #include <jemalloc/jemalloc.h>
 //MKL
 //#include "/usr/include/asm-generic/mman-common.h"
@@ -76,22 +78,26 @@ extern int normal_page_size;
 typedef struct sarena sarena;
 
 struct sarena {
-	pthread_mutex_t	mutex;
-	sicm_device*	dev;
-	size_t		maxsize;
-	size_t		size;
-	size_t		pagesize;
-	int		numaid;
-	sarena*		next;
+    pthread_mutexattr_t attr;
+    pthread_mutex_t*    mutex;
+    sicm_device*        dev;
+    size_t              maxsize;
+    size_t              size;
+    size_t              pagesize;
+    int                 numaid;
+    sarena*             next;
 
-	/* jemalloc related */
-	unsigned	arena_ind;
-	extent_hooks_t	hooks;
+    /* jemalloc related */
+    unsigned            arena_ind;
+    extent_hooks_t      hooks;
 
-	/* jemalloc extent ranges */
-	struct sicm_tree_t*	ranges;
+    /* jemalloc extent ranges */
+    struct sicm_tree_t* ranges;
 
-	int		err;
+    int                 err;
+    int                 mutex_fd;
+    int                 fd;
+    off_t               offset;
 };
 
 extern sarena *sarena_ptr2sarena(void *ptr);

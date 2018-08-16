@@ -147,6 +147,17 @@ sicm_arena_list *sicm_arenas_list();
  */
 sicm_arena sicm_arena_create(size_t maxsize, sicm_device *dev);
 
+/// Create new arena mapped to a shared file
+/**
+ * @param maxsize maximum size of the arena.
+ * @param dev initial device where the arena's allocations should use
+ * @param fd A valid file descriptor to map the memory into
+ * @param offset Starting offset within the file descriptor
+ * @return handle to the newly created arena, or ARENA_DEFAULT if the
+ *         the function failed.
+ */
+sicm_arena sicm_arena_create_mmapped(size_t maxsize, sicm_device *dev, int mutex_fd, int fd, off_t offset);
+
 /// Set default arena for the current thread
 /**
  * @param sa arena to use when sicm_alloc is called. If the value is NULL,
@@ -234,12 +245,6 @@ void *sicm_alloc_aligned(size_t sz, size_t align);
  * @param ptr pointer to the memory to deallocated.
  */
 void sicm_free(void *ptr);
-
-/// Deallocate/free memory mapped region
-/**
- * @param ptr pointer to the memory to deallocated.
- */
-void sicm_free_mmapped(void *ptr, size_t sz);
 
 /// Resize a memory region
 /**
