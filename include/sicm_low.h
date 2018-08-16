@@ -147,7 +147,7 @@ sicm_arena_list *sicm_arenas_list();
  */
 sicm_arena sicm_arena_create(size_t maxsize, sicm_device *dev);
 
-/// Create new arena mapped to a shared file
+/// Create new mapped arena
 /**
  * @param maxsize maximum size of the arena.
  * @param dev initial device where the arena's allocations should use
