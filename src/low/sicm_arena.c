@@ -129,7 +129,7 @@ sicm_arena sicm_arena_create(size_t sz, sicm_device *dev) {
     return sicm_arena_complete_create(sa, &sa_hooks);
 }
 
-sicm_arena sicm_arena_create_mmapped(size_t sz, sicm_device *dev, int mutex_fd, int fd, off_t offset) {
+sicm_arena sicm_arena_create_mmapped(size_t sz, sicm_device *dev, int fd, off_t offset, int mutex_fd, off_t mutex_offset){
     sarena *sa;
 
     pthread_once(&sa_init, sarena_init);
@@ -137,7 +137,7 @@ sicm_arena sicm_arena_create_mmapped(size_t sz, sicm_device *dev, int mutex_fd, 
     if (sa == NULL)
         return NULL;
 
-    sa->mutex = (pthread_mutex_t *) mmap(NULL, sizeof(pthread_mutex_t), PROT_READ | PROT_WRITE, MAP_SHARED, mutex_fd, 0);
+    sa->mutex = (pthread_mutex_t *) mmap(NULL, sizeof(pthread_mutex_t), PROT_READ | PROT_WRITE, MAP_SHARED, mutex_fd, mutex_offset);
     if (sa->mutex == NULL) {
         free(sa);
         return NULL;

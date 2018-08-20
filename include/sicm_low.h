@@ -153,10 +153,12 @@ sicm_arena sicm_arena_create(size_t maxsize, sicm_device *dev);
  * @param dev initial device where the arena's allocations should use
  * @param fd A valid file descriptor to map the memory into
  * @param offset Starting offset within the file descriptor
+ * @param mutex_fd A valid file descriptor to map the mutex into
+ * @param mutex_offset Starting offset within the mutex file descriptor
  * @return handle to the newly created arena, or ARENA_DEFAULT if the
  *         the function failed.
  */
-sicm_arena sicm_arena_create_mmapped(size_t maxsize, sicm_device *dev, int mutex_fd, int fd, off_t offset);
+sicm_arena sicm_arena_create_mmapped(size_t maxsize, sicm_device *dev, int fd, off_t offset, int mutex_fd, off_t mutex_offset);
 
 /// Set default arena for the current thread
 /**
